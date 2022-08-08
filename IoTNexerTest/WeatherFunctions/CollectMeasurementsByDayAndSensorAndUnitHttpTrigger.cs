@@ -54,7 +54,7 @@ namespace IoTNexerTest.WeatherFunctions
         [OpenApiParameter(name: "deviceId", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The device parameter is required")]
         [OpenApiParameter(name: "date", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The date parameter is required")]
         [OpenApiParameter(name: "sensorType", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The sensortype parameter is required")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json; charset=utf-8", bodyType: typeof(WeatherResponse), Description = "Return list dates and values measurements.")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json; charset=utf-8", bodyType: typeof(string), Description = "Return list dates and values measurements.")]
         public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "GET",
             Route = "v1/devices/{deviceId}/data/{date}/{sensorType}")] HttpRequestData req,
@@ -83,7 +83,7 @@ namespace IoTNexerTest.WeatherFunctions
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+                var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 await response.WriteStringAsync(ex.Message);
                 return response;
             }
